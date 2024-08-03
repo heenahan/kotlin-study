@@ -1,7 +1,6 @@
 package org.example
 
 import java.time.Duration
-import java.util.Optional
 
 object Legs {
 
@@ -9,20 +8,20 @@ object Legs {
     fun findLongestLegOver(
         legs: List<Leg>,
         duration: Duration
-    ): Optional<Leg> {
-        var result: Leg? = null
-        for (leg in legs) {
-            if (isLongerThan(leg, duration))
-                if (result == null || isLongerThan(leg, result.plannedDuration))
-                    result = leg
-        }
-        return Optional.ofNullable(result);
+    ): Leg? {
+        // 가장 긴 구간을 찾고 그 긴 구간이 주어진 duration 보다 길다면 return
+        // maxByOrNull 최댓값 return
+        // empty list이면 null return
+        val longestLeg: Leg? = legs.maxByOrNull(Leg::plannedDuration)
+        if (longestLeg != null && longestLeg.plannedDuration > duration)
+            return longestLeg
+        return null
     }
 
     private fun isLongerThan(
         leg: Leg,
         duration: Duration
     ): Boolean {
-        return leg.plannedDuration.compareTo(duration) > 0
+        return leg.plannedDuration > duration
     }
 }
